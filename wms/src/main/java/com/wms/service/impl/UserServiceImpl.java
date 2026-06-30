@@ -1,5 +1,8 @@
 package com.wms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.entity.User;
 import com.wms.mapper.UserMapper;
 import com.wms.service.IUserService;
@@ -20,9 +23,15 @@ import java.util.List;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Resource
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Override
     public List<User> listAll(){
         return userMapper.listAll();
     }
+
+    public IPage<User> pageCC(Page<User> page, Wrapper<User> wrapper){
+        return userMapper.pageCC(page,wrapper);
+    }
+
 }
+

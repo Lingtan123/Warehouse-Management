@@ -71,24 +71,30 @@ public class UserController {
     }
 
     //分页查询
+    //直接查询可以直接新增查询条件，通过map.get()获取即可
     @PostMapping("/listPage")
-    public List<User> listPage(@RequestBody QueryPageParam query){
-        HashMap param = query.getParam();
-        Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
-        String name =(String) param.get("name");
+    public List<User> listPage(@RequestBody HashMap map){
+        System.out.println(map);
+        int pageNum = map.get("pageNum") == null ? 1 : ((Number)map.get("pageNum")).intValue();
+        int pageSize = map.get("pageSize") == null ? 10 : ((Number)map.get("pageSize")).intValue();
+        String name = map.get("name").toString();
+        String id = map.get("id").toString();
+        Page<User> page = new Page<>(pageNum, pageSize);
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(User::getName,name);
+        queryWrapper.eq(User::getId,id);
 
-        IPage result = userService.page(page, queryWrapper);
+        IPage iPage = userService.page(page, queryWrapper);
+        System.out.println("Total = " + iPage.getTotal());
 
-        System.out.println("total == "+result.getTotal());
-
-        return result.getRecords();
+        return iPage.getRecords();
     }
     //分页查询（自定义Page对象）
+    //自定义Page对象可以不修改自定义的实体类，使用Hashmap封装所有数据，然后再通过map.get()调用
     @PostMapping("/listPageC")
     public List<User> listPageC(@RequestBody QueryPageParam query){
+        System.out.println(query);
         HashMap param = query.getParam();
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
         String name =(String) param.get("name");
@@ -96,11 +102,27 @@ public class UserController {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(User::getName,name);
 
-        IPage result = userService.page(page, queryWrapper);
+        IPage iPage = userService.page(page, queryWrapper);
 
-        System.out.println("total == "+result.getTotal());
+        System.out.println("total == "+ iPage.getTotal());
 
-        return result.getRecords();
+        return iPage.getRecords();
     }
 
+    //分页查询（自定义SQL语句）
+    @PostMapping("/listPageCC")
+    public List<User> listPageCC(@RequestBody QueryPageParam query){
+        System.out.println(query);
+        HashMap param = query.getParam();
+        Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
+
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+
+        String name =(String) param.get("name");
+        queryWrapper.like(User::getName,name);
+
+        IPage iPage = userService.pageCC(page,queryWrapper);
+        System.out.println("total == "+ iPage.getTotal());
+        return iPage.getRecords();
+    }
 }

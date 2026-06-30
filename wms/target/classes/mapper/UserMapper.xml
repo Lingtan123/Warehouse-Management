@@ -4,4 +4,8 @@
 <select id="listAll" resultType="com.wms.entity.User">
     select * from p_user
 </select>
+    <select id="pageCC" resultType="com.wms.entity.User">
+        select * from p_user
+        ${ew.customSqlSegment}
+    </select>
 </mapper>

@@ -3,7 +3,7 @@ package com.wms.common;
 import lombok.Data;
 
 import java.util.HashMap;
-
+//封装请求对象，也可以不进行封装直接使用Hashmap，但是封装可以更便于进行阅读代码
 @Data
 public class QueryPageParam {
     //默认值
