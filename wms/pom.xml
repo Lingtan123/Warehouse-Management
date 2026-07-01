@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.wms</groupId>
-    <artifactId>warehouse-management</artifactId>
+    <artifactId>wms</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>wms</name>
     <description>wms</description>
