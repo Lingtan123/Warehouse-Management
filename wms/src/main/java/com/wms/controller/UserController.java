@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
+import com.wms.common.Result;
 import com.wms.entity.User;
 import com.wms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,5 +125,24 @@ public class UserController {
         IPage iPage = userService.pageCC(page,queryWrapper);
         System.out.println("total == "+ iPage.getTotal());
         return iPage.getRecords();
+    }
+
+    //分页查询（后端返回数据封装）（和自定义分页使用同一份返回）
+    //使用自定义类Result封装
+    @PostMapping("/listPageC1")
+    public Result listPageC1(@RequestBody QueryPageParam query){
+        System.out.println(query);
+        HashMap param = query.getParam();
+        Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
+        String name =(String) param.get("name");
+
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(User::getName,name);
+
+        IPage iPage = userService.page(page, queryWrapper);
+
+        System.out.println("total == "+ iPage.getTotal());
+
+        return Result.success(iPage.getTotal(),iPage.getRecords());
     }
 }

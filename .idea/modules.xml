@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/WarehouseManagement.iml" filepath="$PROJECT_DIR$/.idea/WarehouseManagement.iml" />
       <module fileurl="file://$PROJECT_DIR$/wms/wms.iml" filepath="$PROJECT_DIR$/wms/wms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/wms-server.iml" filepath="$PROJECT_DIR$/.idea/wms-server.iml" />
     </modules>
   </component>
 </project>
