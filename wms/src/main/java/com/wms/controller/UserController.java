@@ -35,8 +35,8 @@ public class UserController {
     @Autowired
     private IUserService userService;
     @GetMapping("/list")
-    public List<User> listAll(){
-        return userService.listAll();
+    public Result listAll(){
+        return Result.success(userService.listAll());
     }
 
     //新增
@@ -63,18 +63,21 @@ public class UserController {
 
     //查询（模糊、匹配）
     @PostMapping("/listP")
-    public List<User> listP(@RequestBody User user){
+    public Result listP(@RequestBody User user){
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
-        queryWrapper.like(User::getName,user.getName());
+        if(user.getName() != null){
+            queryWrapper.like(User::getName, user.getName());
+        }
+       // queryWrapper.like(User::getName,user.getName());
         //like模糊匹配 eq精确匹配
         //queryWrapper.eq(User::getName,user.getName());
-        return userService.list(queryWrapper);
+        return Result.success(userService.list(queryWrapper));
     }
 
     //分页查询
     //直接查询可以直接新增查询条件，通过map.get()获取即可
     @PostMapping("/listPage")
-    public List<User> listPage(@RequestBody HashMap map){
+    public Result listPage(@RequestBody HashMap map){
         System.out.println(map);
         int pageNum = map.get("pageNum") == null ? 1 : ((Number)map.get("pageNum")).intValue();
         int pageSize = map.get("pageSize") == null ? 10 : ((Number)map.get("pageSize")).intValue();
@@ -89,12 +92,12 @@ public class UserController {
         IPage iPage = userService.page(page, queryWrapper);
         System.out.println("Total = " + iPage.getTotal());
 
-        return iPage.getRecords();
+        return Result.success(iPage.getRecords());
     }
     //分页查询（自定义Page对象）
     //自定义Page对象可以不修改自定义的实体类，使用Hashmap封装所有数据，然后再通过map.get()调用
     @PostMapping("/listPageC")
-    public List<User> listPageC(@RequestBody QueryPageParam query){
+    public Result listPageC(@RequestBody QueryPageParam query){
         System.out.println(query);
         HashMap param = query.getParam();
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
@@ -107,12 +110,12 @@ public class UserController {
 
         System.out.println("total == "+ iPage.getTotal());
 
-        return iPage.getRecords();
+        return Result.success(iPage.getRecords());
     }
 
     //分页查询（自定义SQL语句）
     @PostMapping("/listPageCC")
-    public List<User> listPageCC(@RequestBody QueryPageParam query){
+    public Result listPageCC(@RequestBody QueryPageParam query){
         System.out.println(query);
         HashMap param = query.getParam();
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
@@ -124,7 +127,7 @@ public class UserController {
 
         IPage iPage = userService.pageCC(page,queryWrapper);
         System.out.println("total == "+ iPage.getTotal());
-        return iPage.getRecords();
+        return Result.success(iPage.getRecords());
     }
 
     //分页查询（后端返回数据封装）（和自定义分页使用同一份返回）

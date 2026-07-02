@@ -6,12 +6,12 @@
 
 <script>
 
-import HomeIndex from "@/components/Index.vue";
+import HomeHomeIndex from "@/components/HomeIndex.vue";
 
 export default {
   name: 'App',
   components: {
-    HomeIndex
+    HomeIndex: HomeHomeIndex
   }
 }
 </script>

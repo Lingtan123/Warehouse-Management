@@ -5,17 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="29fcba87-66be-4682-9e42-4b8a7b93573a" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/WarehouseManagement.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/wms-server.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wms/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms/target/classes/com/wms/common/Result.class" beforeDir="false" afterPath="$PROJECT_DIR$/wms/target/classes/com/wms/common/Result.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms/wms.iml" beforeDir="false" afterPath="$PROJECT_DIR$/wms/wms.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wms-web/src/components/HomeIndex.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/assets/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/assets/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/Index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/common/Result.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/common/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,19 +25,21 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Vue Composition API Component" />
-        <option value="Vue Options API Component" />
         <option value="CSS File" />
+        <option value="Vue Options API Component" />
+        <option value="Vue Composition API Component" />
+        <option value="Class" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -45,46 +47,57 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="3Ftk7behGxHjIlJlVIRYENx9Rz6" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.WmsApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "list.type.of.created.stylesheet": "CSS",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "问题",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "ts.external.directory.path": "C:\\Develop\\idea\\IntelliJ IDEA 2025.3.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.WmsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;问题&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Develop\\idea\\IntelliJ IDEA 2025.3.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "vue.recent.templates": [
-      "Vue Composition API Component",
-      "Vue Options API Component"
+  &quot;keyToStringList&quot;: {
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Options API Component&quot;,
+      &quot;Vue Composition API Component&quot;
     ]
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src\api" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="WmsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="wms" />
@@ -109,7 +122,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1782901587808</updated>
-      <workItem from="1782901589336" duration="6376000" />
+      <workItem from="1782901589336" duration="6712000" />
+      <workItem from="1782968783745" duration="1290000" />
+      <workItem from="1782970089762" duration="20335000" />
     </task>
     <servers />
   </component>

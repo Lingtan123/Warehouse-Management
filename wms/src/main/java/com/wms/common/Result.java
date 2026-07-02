@@ -1,6 +1,9 @@
 package com.wms.common;
 
+import com.wms.entity.User;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class Result {
@@ -15,6 +18,14 @@ public class Result {
 
     public static Result success() {
         return new Result(200,"成功",0L,null);
+    }
+
+    public static Result success(List<User> list){
+        int sum = 0;
+        for(User user:list){
+            sum++;
+        }
+        return new Result(200,"成功",sum,list);
     }
 
     public static Result success(Object data) {
