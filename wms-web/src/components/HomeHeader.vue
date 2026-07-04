@@ -1,6 +1,11 @@
 <script>
 export default {
   name: 'HomeHeader',
+    data(){
+      return {
+        user : JSON.parse(sessionStorage.getItem('CurUser')) ,
+      }
+    },
   props:{
     icon: String
   },
@@ -10,6 +15,24 @@ export default {
     },
     logout(){
       console.log('logout');
+      this.$confirm('确定退出登录吗？',{
+        type: 'warning',
+        confirmButtonText: '确定',
+        center: true
+      }).then(()=>{
+        this.$message({
+          type: 'success',
+          message: '成功退出'
+        })
+        this.$router.push('/');
+        sessionStorage.clear();
+      }).catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        })
+      })
+
     },
     collapse(){
       this.$emit('doCollapse');
@@ -31,7 +54,7 @@ export default {
 
   <el-dropdown trigger="click">
     <span class="el-dropdown-link">
-      王小虎
+       {{ user.name }}
       <i class="el-icon-arrow-down" style="margin-left: 5px;"></i>
     </span>
 

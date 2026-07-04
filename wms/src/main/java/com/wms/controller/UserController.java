@@ -3,6 +3,7 @@ package com.wms.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
@@ -41,13 +42,13 @@ public class UserController {
 
     //新增
     @PostMapping("/save")
-    public boolean save(@RequestBody User user){
-        return userService.save(user);
+    public Result save(@RequestBody User user){
+        return userService.save(user) ? Result.success() : Result.fail();
     }
     //修改
     @PostMapping("/mod")
-    public boolean mod(@RequestBody User user){
-        return userService.updateById(user);
+    public Result mod(@RequestBody User user){
+        return userService.updateById(user) ? Result.success() : Result.fail();
     }
     //新增或修改
     @PostMapping("/saveOrMod")
@@ -57,8 +58,24 @@ public class UserController {
 
     //删除
     @GetMapping("/delete")
-    public boolean delete(int id){
-        return userService.removeById(id);
+    public Result delete(int id){
+        return userService.removeById(id) ? Result.success() : Result.fail();
+    }
+
+    //根据账号查询
+    @GetMapping("/findByNo")
+    public Result findByNo(@RequestParam String no){
+        List<User> list = userService.lambdaQuery().eq(User::getNo, no).list();
+        return !list.isEmpty() ? Result.success(list) : Result.fail();
+    }
+
+    //登录
+    @PostMapping("/login")
+    public Result login(@RequestBody User user){
+        List<User> list =  userService.lambdaQuery().eq(User::getNo, user.getNo())
+                .eq(User::getPassword,user.getPassword())
+                .list();
+        return !list.isEmpty() ? Result.success(list) : Result.fail();
     }
 
     //查询（模糊、匹配）
@@ -138,9 +155,16 @@ public class UserController {
         HashMap param = query.getParam();
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
         String name =(String) param.get("name");
+        String sex =(String) param.get("sex");
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(User::getName,name);
+
+        if(StringUtils.isNotBlank(name)){
+            queryWrapper.like(User::getName,name);
+        }
+        if(StringUtils.isNotBlank(sex)){
+            queryWrapper.like(User::getSex,sex);
+        }
 
         IPage iPage = userService.page(page, queryWrapper);
 
