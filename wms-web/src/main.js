@@ -6,6 +6,7 @@ import './assets/global.css'
 import axios from 'axios'
 import VueRouter from 'vue-router'
 import router from './router/Index'
+import store from './store/Index'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -15,5 +16,6 @@ Vue.prototype.$httpUrl = 'http://localhost:8090'
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

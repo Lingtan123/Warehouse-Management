@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
+import com.wms.entity.Menu;
 import com.wms.entity.User;
+import com.wms.service.IMenuService;
 import com.wms.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,9 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IMenuService menuService;
+
     @GetMapping("/list")
     public Result listAll(){
         return Result.success(userService.listAll());
@@ -75,7 +80,16 @@ public class UserController {
         List<User> list =  userService.lambdaQuery().eq(User::getNo, user.getNo())
                 .eq(User::getPassword,user.getPassword())
                 .list();
-        return !list.isEmpty() ? Result.success(list) : Result.fail();
+        if(!list.isEmpty()){
+            User user1 = list.get(0);
+            List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuRight,user1.getRoleId()).list();
+            HashMap map = new HashMap<>();
+            map.put("user",user1);
+            map.put("menu",menuList);
+            return Result.success(map);
+        }
+
+        return Result.fail();
     }
 
     //查询（模糊、匹配）
@@ -156,6 +170,7 @@ public class UserController {
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
         String name =(String) param.get("name");
         String sex =(String) param.get("sex");
+        String roleId =(String) param.get("roleId");
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
 
@@ -164,6 +179,9 @@ public class UserController {
         }
         if(StringUtils.isNotBlank(sex)){
             queryWrapper.like(User::getSex,sex);
+        }
+        if(StringUtils.isNotBlank(roleId)){
+            queryWrapper.like(User::getRoleId,roleId);
         }
 
         IPage iPage = userService.page(page, queryWrapper);

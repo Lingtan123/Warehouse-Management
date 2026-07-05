@@ -39,9 +39,6 @@ export default {
       this.$emit('doCollapse');
     },
   },
-  created(){
-    this.$router.push('/Home');
-  }
 }
 </script>
 

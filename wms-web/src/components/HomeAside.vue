@@ -3,6 +3,23 @@ export default {
   name: "HomeAside",
   data(){
     return {
+      /*menu:[{
+          menuClick:'Admin',
+          menuName:'管理员管理',
+          menuIcon:'el-icon-s-custom',
+        },{
+          menuClick:'User',
+          menuName:'用户管理',
+          menuIcon:'el-icon-user-solid',
+        }
+      ]*/
+    }
+  },
+  computed:{
+    "menu":{
+      get(){
+        return this.$store.state.menu;
+      }
     }
   },
   props:{
@@ -19,21 +36,20 @@ export default {
         class="aside-menu"
         :collapse="isCollapsed"
         :collapse-transition="false"
+        router
     >
       <el-menu-item index="/Home">
         <i class="el-icon-s-home"></i>
         <span slot="title">首页</span>
       </el-menu-item>
 
-      <el-menu-item index="/One">
-        <i class="el-icon-s-flag"></i>
-        <span slot="title">导航一</span>
+      {{ /*动态生成menu, 进行导航一和导航二的跳转*/ }}
+
+      <el-menu-item :index="'/'+item.menuClick" v-for="(item,i) in menu" :key="i" >
+        <i :class="item.menuIcon"></i>
+        <span slot="title">{{item.menuName}}</span>
       </el-menu-item>
 
-      <el-menu-item index="/Two">
-        <i class="el-icon-s-opportunity"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
     </el-menu>
 </template>
 

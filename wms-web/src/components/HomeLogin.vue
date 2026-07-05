@@ -26,11 +26,11 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           request.post("/user/login",this.loginForm).then(res => {
-            console.log(res)
             if (res.code == 200) {
               //存储，跳转到主页
-              sessionStorage.setItem("CurUser",JSON.stringify(res.data[0]));
-              this.$router.replace('/Index');
+              sessionStorage.setItem("CurUser",JSON.stringify(res.data.user));
+              this.$store.commit("setMenu",res.data.menu);
+              this.$router.replace('/Home');
             }else{
               this.confirm_disabled = false
               alert('校验失败，请检查用户名和密码');

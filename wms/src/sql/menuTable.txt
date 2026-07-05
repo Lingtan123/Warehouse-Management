@@ -1,0 +1,21 @@
+select database();
+use wms;
+
+create table menu(
+                     `id` int(11) not null,
+                     `menuCode` varchar(8) default null comment '菜单编码',
+                     `menuName` varchar(16) default null comment '菜单名字',
+                     `menuLevel` varchar(2) default null comment '菜单级别',
+                     `menuParentCode` varchar(8) default null comment '菜单的父Code',
+                    `menuClick` varchar(16) default null comment '点击触发的函数',
+                     `menuRight` varchar(8) default null comment '权限 0超级管理员 1管理员 2用户 可以逗号组合使用',
+                     `menuComponent` varchar(200) default null comment '跳转的页面文件',
+                     `menuIcon` varchar(100) default null,
+                     primary key (`id`)
+) ENGINE = InnoDB DEFAULT charset = utf8;
+
+BEGIN ;
+INSERT INTO `menu`
+values (1,'001','管理员管理','1',null,'Admin','0','admin/AdminManage.vue','el-icon-s-custom' );
+INSERT INTO `menu`
+values (2,'002','用户管理','1',null,'User','0,1','user/UserManage.vue','el-icon-user-solid' );
