@@ -1,76 +1,89 @@
 <script>
-  export default {
-    name: "DateUtils",
-    props:["s"],
-    data() {
-      return {
-        time:{
-          hour: "",
-          minute: "",
-          second: "",
-        },
-        nowTime:"",
-        week:[
-          "星期天",
-          "星期一",
-          "星期二",
-          "星期三",
-          "星期四",
-          "星期五",
-          "星期六",
-        ]
-      }
-    },
-    mounted() {
-      this.dataTime();
-    },
-    methods: {
-      dataTime(){
-        this.timeFormate();
-        setTimeout(()=>{
-          this.dataTime();
-        },1000);
+export default {
+  name: "DateUtils",
+  props: ["s"],
+  data() {
+    return {
+      time: {
+        hour: "",
+        minute: "",
+        second: ""
       },
-      timeFormate(){
-        const newTime = new Date();
-        this.time.hour = this.getIncrease(newTime.getHours(),2);
-        this.time.minute = this.getIncrease(newTime.getMinutes(),2);
-        this.time.second = this.getIncrease(newTime.getSeconds(),2);
-        this.nowTime =
-            this.getIncrease(newTime.getFullYear(),4)+"年"+
-            this.getIncrease(newTime.getMonth()+1,2)+"月"+
-            this.getIncrease(newTime.getDate(),2)+"日"+
-            this.week;
-      },
-      getIncrease(num,digit){
-        var increase="";
-        for(var i=0;i<digit;i++){
-          increase+="0";
-        }
-        return (increase + num).slice(-digit);
+      nowTime: "",
+      timer: null,
+      week: [
+        "星期天",
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六"
+      ]
+    };
+  },
+  mounted() {
+    this.dataTime();
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer);
+  },
+  methods: {
+    dataTime() {
+      this.timeFormate();
+      this.timer = setTimeout(() => {
+        this.dataTime();
+      }, 1000);
+    },
+    timeFormate() {
+      const newTime = new Date();
+      this.time.hour = this.getIncrease(newTime.getHours(), 2);
+      this.time.minute = this.getIncrease(newTime.getMinutes(), 2);
+      this.time.second = this.getIncrease(newTime.getSeconds(), 2);
+      this.nowTime =
+        this.getIncrease(newTime.getFullYear(), 4) + "年" +
+        this.getIncrease(newTime.getMonth() + 1, 2) + "月" +
+        this.getIncrease(newTime.getDate(), 2) + "日 " +
+        this.week[newTime.getDay()];
+    },
+    getIncrease(num, digit) {
+      var increase = "";
+      for (var i = 0; i < digit; i++) {
+        increase += "0";
       }
+      return (increase + num).slice(-digit);
     }
   }
+};
 </script>
 
 <template>
-  <div style="">
+  <div>
     <span class="time" id="time">
-      今天是:<span class="date">{{ nowTime }}</span>
-      <span class="hour">{{time.hour}}</span>
+      现在是：<span class="date">{{ nowTime }}</span>
+      <span class="hour">{{ time.hour }}</span>
       <a class="split">:</a>
-      <span class="minute">{{time.minute}}</span>
+      <span class="minute">{{ time.minute }}</span>
       <a class="split">:</a>
-      <span class="second">{{time.second}}</span>
+      <span class="second">{{ time.second }}</span>
     </span>
   </div>
 </template>
 
 <style scoped>
-.txt-data .time{
-  fone-size: 1rem;
-  margin-right: 0.5rem;
+.time {
+  font-size: 30px;
+  color: #303133;
+  margin-left: 22rem;
 }
+
+.date,
+.hour,
+.minute,
+.second {
+  font-weight: 600;
+}
+
 .split{
   animation: shark 1s step-end infinite;
   vertical-align: center;
@@ -86,5 +99,4 @@
     opacity: 0;
   }
 }
-
 </style>

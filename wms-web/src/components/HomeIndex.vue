@@ -1,11 +1,10 @@
 <script>
 import HomeAside from "@/components/HomeAside.vue";
 import HomeHeader from "@/components/HomeHeader.vue";
-import HomeMain from "@/components/HomeMain.vue";
 
 export default {
   name: "HomeIndex",
-  components: {HomeAside,HomeHeader,HomeMain},
+  components: {HomeAside,HomeHeader},
   data(){
     return {
       isCollapsed: false,
@@ -41,7 +40,7 @@ export default {
       </el-header>
 
       <el-main class="layout-main">
-        <HomeMain></HomeMain>
+        <router-view/>
       </el-main>
     </el-container>
 

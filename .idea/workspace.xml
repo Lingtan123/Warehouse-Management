@@ -6,7 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="29fcba87-66be-4682-9e42-4b8a7b93573a" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/DateUtils.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/DateUtils.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeHeader.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeHome.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeIndex.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeIndex.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/router/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/router/Index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +121,7 @@
       <workItem from="1782968783745" duration="1290000" />
       <workItem from="1782970089762" duration="20629000" />
       <workItem from="1783143202011" duration="23441000" />
-      <workItem from="1783234656275" duration="2607000" />
+      <workItem from="1783234656275" duration="4100000" />
     </task>
     <servers />
   </component>

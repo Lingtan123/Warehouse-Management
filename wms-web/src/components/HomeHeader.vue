@@ -12,6 +12,7 @@ export default {
   methods: {
     toUser(){
       console.log('toUser');
+      this.$router.push('/Home');
     },
     logout(){
       console.log('logout');
@@ -36,7 +37,10 @@ export default {
     },
     collapse(){
       this.$emit('doCollapse');
-    }
+    },
+  },
+  created(){
+    this.$router.push('/Home');
   }
 }
 </script>
