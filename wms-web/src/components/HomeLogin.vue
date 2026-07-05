@@ -59,7 +59,7 @@ export default {
                       auto-complete="off" size="small"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input style="" type="password" v-model="loginForm.password"
+            <el-input type="password" v-model="loginForm.password"
                       auto-complete="off" size="small" @keyup.enter.native="confirm"></el-input>
           </el-form-item>
           <el-form-item>

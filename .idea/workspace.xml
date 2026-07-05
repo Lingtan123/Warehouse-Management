@@ -6,15 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="29fcba87-66be-4682-9e42-4b8a7b93573a" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeHeader.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeMain.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeMain.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/common/QueryPageParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/common/QueryPageParam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeLogin.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +19,8 @@
         <option value="CSS File" />
         <option value="Vue Options API Component" />
         <option value="Class" />
-        <option value="Vue Composition API Component" />
         <option value="JavaScript File" />
+        <option value="Vue Composition API Component" />
       </list>
     </option>
   </component>
@@ -124,7 +116,8 @@
       <workItem from="1782901589336" duration="6712000" />
       <workItem from="1782968783745" duration="1290000" />
       <workItem from="1782970089762" duration="20629000" />
-      <workItem from="1783143202011" duration="23267000" />
+      <workItem from="1783143202011" duration="23441000" />
+      <workItem from="1783234656275" duration="2607000" />
     </task>
     <servers />
   </component>
