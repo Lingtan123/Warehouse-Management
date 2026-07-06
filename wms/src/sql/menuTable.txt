@@ -19,3 +19,52 @@ INSERT INTO `menu`
 values (1,'001','管理员管理','1',null,'Admin','0','admin/AdminManage.vue','el-icon-s-custom' );
 INSERT INTO `menu`
 values (2,'002','用户管理','1',null,'User','0,1','user/UserManage.vue','el-icon-user-solid' );
+
+
+drop table if exists `storage`;
+create table `storage`(
+    `id` int(11) not null auto_increment comment '主键',
+    name varchar(100) not null comment '仓库名',
+    `remake` varchar(1000) default null comment '备注',
+    primary key (`id`)
+) engine=InnoDB default charset=utf8;
+set foreign_key_checks =1;
+
+
+drop table if exists `goodsType`;
+create table `goodsType`(
+    `id` int(11) not null auto_increment comment '主键',
+    `name` varchar(100) not null comment '分类名',
+    `remake` varchar(1000) default null comment '备注',
+    primary key (`id`)
+)ENGINE =InnoDB DEFAULT CHARSET =utf8;
+
+
+
+
+drop table if exists `goods`;
+create table `goods`(
+    `id` int(11) not null auto_increment comment '主键',
+    `name` varchar(100) not null comment '货物名称',
+    `storage` int(11) not null comment '所处仓库',
+    `goodstype` int(11) not null comment '所属分类',
+    `count` int(11) not null comment '数量',
+    `remake` varchar(1000) default null comment '备注',
+    primary key (`id`),
+    foreign key (`storage`) references storage(`id`),
+    foreign key (`goodstype`) references goodstype(`id`)
+)ENGINE = InnoDB default charset = utf8;
+
+
+drop table if exists `record`;
+create table `record`(
+    `id` int(11) not null auto_increment comment '主键',
+    `goods` int(11) not null comment '货物id',
+    `userId` int(11) default null comment '取货人/补货人',
+    `adminId` int(11) default null comment '操作人id',
+    `count` int(11) default null comment '数量',
+    `time` datetime default null comment '操作时间',
+    `remake` varchar(1000) default null comment '备注',
+    primary key (`id`),
+    foreign key (`goods`) references goods(`id`)
+)ENGINE = InnoDB default charset = utf8;

@@ -290,12 +290,12 @@ export default{
     >
       <el-form ref="form" :rules="rules" :model="form" label-width="80px">
         <el-form-item label="姓名" prop="name">
-          <el-col span="20">
+          <el-col :span="20">
             <el-input v-model="form.name"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="年龄" prop="age">
-          <el-col span="20">
+          <el-col :span="20">
             <el-input v-model="form.age"></el-input>
           </el-col>
         </el-form-item>
@@ -306,17 +306,17 @@ export default{
           </el-radio-group>
         </el-form-item>
         <el-form-item label="账号" prop="no">
-          <el-col span="20">
+          <el-col :span="20">
             <el-input v-model="form.no"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-col span="20">
+          <el-col :span="20">
             <el-input v-model="form.password"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
-          <el-col span="20">
+          <el-col :span="20">
             <el-input v-model="form.phone"></el-input>
           </el-col>
         </el-form-item>

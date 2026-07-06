@@ -132,9 +132,9 @@ export default {
     <div class="welcome-panel">
       <h1>个人中心</h1>
       <p>欢迎来到集成仓库管理系统</p>
-      <el-table-column>
+      <div>
         <el-button size="small" type="warning" style="margin-top: 15px" @click="mod()">编辑个人信息</el-button>
-      </el-table-column>
+      </div>
     </div>
 
     <el-card shadow="never" class="profile-card">
@@ -208,12 +208,12 @@ export default {
       >
         <el-form ref="user" :rules="rules" :model="user" label-width="80px">
           <el-form-item label="姓名" prop="name">
-            <el-col span="20">
+            <el-col :span="20">
               <el-input v-model="user.name"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="年龄" prop="age">
-            <el-col span="20">
+            <el-col :span="20">
               <el-input v-model="user.age"></el-input>
             </el-col>
           </el-form-item>
@@ -224,12 +224,12 @@ export default {
             </el-radio-group>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-col span="20">
+            <el-col :span="20">
               <el-input v-model="user.password"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="电话" prop="phone">
-            <el-col span="20">
+            <el-col :span="20">
               <el-input v-model="user.phone"></el-input>
             </el-col>
           </el-form-item>
