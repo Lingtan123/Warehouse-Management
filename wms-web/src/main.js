@@ -14,6 +14,8 @@ Vue.use(VueRouter)
 Vue.prototype.$axios = axios;
 Vue.prototype.$httpUrl = 'http://localhost:8090'
 
+store.commit('restoreRoutes')
+
 new Vue({
   router,
   store,

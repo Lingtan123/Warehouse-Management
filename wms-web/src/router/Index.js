@@ -1,7 +1,7 @@
 import Router from 'vue-router'
 import VueRouter from "vue-router";
 
-const routes = [
+export const staticRoutes = [
     {
         path: '/',
         name: 'login',
@@ -40,16 +40,18 @@ const routes = [
     }
 ]
 
-const router = new Router({
-    mode: 'history',
-    routes
-})
+function createRouter() {
+    return new Router({
+        mode: 'history',
+        routes: staticRoutes
+    })
+}
+
+const router = createRouter()
 
 export function resetRouter() {
-    router.matcher = new VueRouter({
-        mode: 'history',
-        routes: [],
-    }).matcher
+    const newRouter = createRouter()
+    router.matcher = newRouter.matcher
 }
 
 const VueRouterPush = VueRouter.prototype.push

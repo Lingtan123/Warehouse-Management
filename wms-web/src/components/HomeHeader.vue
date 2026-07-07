@@ -25,8 +25,9 @@ export default {
           type: 'success',
           message: '成功退出'
         })
-        this.$router.push('/');
+        this.$store.commit('clearMenu');
         sessionStorage.clear();
+        this.$router.push('/');
       }).catch(()=>{
         this.$message({
           type: 'info',
