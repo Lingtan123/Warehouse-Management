@@ -23,6 +23,7 @@ export default{
       goodstypeData:[],
       storage:'',
       goodstype:'',
+      CurUser : JSON.parse(sessionStorage.getItem('CurUser')) ,
     }
   },
   methods: {
@@ -45,6 +46,8 @@ export default{
           name: this.name,
           storage: this.storage+'',
           goodstype: this.goodstype+'',
+          roleId:this.CurUser.roleId+'',
+          userId:this.CurUser.id+'',
         }
       }).then(res=>{
         if(res.code == 200){
@@ -93,6 +96,22 @@ export default{
         return item.id == row.goodstype;
       })
       return temp && temp.name;
+    },
+    del(id){
+      request.get('/record/delete?id='+id).then(res=>{
+        if(res.code == 200){
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+        }else{
+          this.$message({
+            message: '删除失败',
+            type: 'error'
+          })
+        }
+        this.loadPost();
+      })
     }
   },
   beforeMount() {
@@ -149,6 +168,14 @@ export default{
       <el-table-column prop="time" label="操作时间" width="180">
       </el-table-column>
       <el-table-column prop="remake" label="备注">
+      </el-table-column>
+
+      <el-table-column prop="operate" label="操作" v-if="this.CurUser.roleId!=2">
+        <template slot-scope="scope">
+          <el-popconfirm title="确定删除这条数据吗？" @confirm="del(scope.row.id)" style="margin-left: 7px">
+            <el-button slot="reference" size="small" type="danger" >删除</el-button>
+          </el-popconfirm>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination

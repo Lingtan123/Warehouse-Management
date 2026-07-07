@@ -6,15 +6,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wms.common.GoodsSaveRequest;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
+import com.wms.entity.Goods;
+import com.wms.service.IGoodsService;
 import com.wms.service.IRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.wms.entity.Record;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
@@ -31,6 +31,14 @@ import java.util.HashMap;
 public class RecordController {
     @Autowired
     private IRecordService recordService;
+    @Autowired
+    private IGoodsService goodsService;
+
+    @GetMapping("/delete")
+    public Result delete(int id){
+        return recordService.removeById(id) ? Result.success() : Result.fail();
+    }
+
     @PostMapping("/list")
     public Result list(@RequestBody QueryPageParam query){
         System.out.println(query);
@@ -39,10 +47,17 @@ public class RecordController {
         String name = (String) map.get("name");
         String type = (String) map.get("goodstype");
         String storage = (String) map.get("storage");
+        String roleId = (String) map.get("roleId");
+        String userId = (String) map.get("userId");
 
         QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.apply(" r.goods = g.id and g.storage = s.id and g.goodstype = gt.id ");
+
+        if("2".equals(roleId)){
+            queryWrapper.lambda().eq(Record::getUserId,userId);
+        }
+
         if(StringUtils.isNotEmpty(name)){
             queryWrapper.like("g.name",name);
         }
@@ -57,5 +72,26 @@ public class RecordController {
         System.out.println("total ==" + iPage.getTotal());
 
         return Result.success(iPage.getTotal(),iPage.getRecords());
+    }
+
+    @PostMapping("/save")
+    public Result save(@RequestBody GoodsSaveRequest request){
+        Goods goods = goodsService.getById(request.getId());
+        Record record = new Record();
+        record.setGoods(goods.getId());
+        record.setUserId(request.getUserId());
+        record.setAdminId(request.getAdminId());
+        record.setCount(request.getCount());
+        record.setRemake(request.getRemake());
+        int n = request.getCount();
+        //出库
+        if("2".equals(request.getAction())){
+            n = -n;
+            record.setCount(n);
+        }
+        int num = goods.getCount() + n;
+        goods.setCount(num);
+        goodsService.updateById(goods);
+        return recordService.save(record) ? Result.success() : Result.fail();
     }
 }

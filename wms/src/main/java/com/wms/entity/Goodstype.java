@@ -1,5 +1,6 @@
 package com.wms.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -14,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author nobody
- * @since 2026-07-06
+ * @since 2026-07-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -33,11 +34,13 @@ public class Goodstype implements Serializable {
     /**
      * 分类名
      */
+    @TableField("name")
     private String name;
 
     /**
      * 备注
      */
+    @TableField("remake")
     private String remake;
 
 

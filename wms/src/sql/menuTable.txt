@@ -63,8 +63,22 @@ create table `record`(
     `userId` int(11) default null comment '取货人/补货人',
     `adminId` int(11) default null comment '操作人id',
     `count` int(11) default null comment '数量',
-    `time` datetime default null comment '操作时间',
+    `time` datetime default CURRENT_TIMESTAMP comment '操作时间',
     `remake` varchar(1000) default null comment '备注',
     primary key (`id`),
     foreign key (`goods`) references goods(`id`)
 )ENGINE = InnoDB default charset = utf8;
+
+
+
+select r.*,g.name goodsName,s.name storageName,gt.name goodstypeName,(
+    select u.name from p_user u
+    where r.userId = u.id
+    ) userName,(
+        select u.name from p_user u
+        where r.adminId = u.id
+    ) adminName
+from record r,goods g,storage s,goodstype gt
+where r.goods = g.id
+and g.storage = s.id
+and g.goodstype = gt.id;

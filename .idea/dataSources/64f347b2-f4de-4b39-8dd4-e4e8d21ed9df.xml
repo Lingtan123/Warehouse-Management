@@ -1207,6 +1207,7 @@
     </column>
     <column id="347" parent="301" name="time">
       <Comment>操作时间</Comment>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <Position>6</Position>
       <StoredType>datetime|0s</StoredType>
     </column>

@@ -14,6 +14,7 @@ export default{
     let checkDuplicate = (rule, value, callback) => {
       if(this.form.id){
         callback();
+        return;
       }
       request.get('user/findByNo?no='+this.form.no).then(res => {
         if(res.code != 200){
@@ -89,6 +90,18 @@ export default{
       this.pageNum = val;
       this.loadPost();
     },
+    getDefaultForm() {
+      return {
+        id: '',
+        name: '',
+        age: '',
+        phone: '',
+        no: '',
+        password: '',
+        sex: '',
+        roleId: '1'
+      }
+    },
     loadPost(){
       request.post('/user/listPageC1',{
         pageNum:this.pageNum,
@@ -112,9 +125,12 @@ export default{
       this.sex = ''
     },
     resetForm(){
+      this.form =this.getDefaultForm();
+      this.form.id = ''
       this.$refs.form.resetFields();
     },
     start(){
+      this.resetForm()
       this.centerDialogVisible = true
     },
     isClose(done) {

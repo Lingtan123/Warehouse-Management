@@ -36,6 +36,13 @@ export default{
       this.pageNum = val;
       this.loadPost();
     },
+    getDefaultForm() {
+      return {
+        id: '',
+        name: '',
+        remake: '',
+      }
+    },
     loadPost(){
       request.post('/goodstype/listPageC',{
         pageNum:this.pageNum,
@@ -56,6 +63,7 @@ export default{
       this.name = ''
     },
     resetForm(){
+      this.form = this.getDefaultForm();
       this.form.id = ''
       this.$refs.form.resetFields();
     },

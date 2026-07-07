@@ -7,11 +7,21 @@
     <list default="true" id="29fcba87-66be-4682-9e42-4b8a7b93573a" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/64f347b2-f4de-4b39-8dd4-e4e8d21ed9df.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/64f347b2-f4de-4b39-8dd4-e4e8d21ed9df.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/src/components/HomeHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/HomeHome.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wms-web/src/components/admin/AdminManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/admin/AdminManage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wms-web/src/components/user/TestManage.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/goods/GoodsManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/goods/GoodsManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/goodstype/GoodstypeManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/goodstype/GoodstypeManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/record/RecordManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/record/RecordManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms-web/src/components/storage/StorageManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/storage/StorageManage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wms-web/src/components/user/UserManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/wms-web/src/components/user/UserManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/GoodsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/GoodsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/RecordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/controller/RecordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/entity/Goodstype.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/entity/Goodstype.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/wms/entity/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/wms/entity/Record.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wms/src/sql/menuTable.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/sql/menuTable.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/GoodsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/GoodsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/RecordController.class" beforeDir="false" afterPath="$PROJECT_DIR$/wms/target/classes/com/wms/controller/RecordController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/target/classes/com/wms/entity/Goodstype.class" beforeDir="false" afterPath="$PROJECT_DIR$/wms/target/classes/com/wms/entity/Goodstype.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wms/target/classes/com/wms/entity/Record.class" beforeDir="false" afterPath="$PROJECT_DIR$/wms/target/classes/com/wms/entity/Record.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +83,7 @@
     "Spring Boot.WmsApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Develop/idea code/WarehouseManagement/wms-web/src/components/record",
+    "last_opened_file_path": "C:/Develop/idea code/WarehouseManagement/wms-web/src/components/user",
     "list.type.of.created.stylesheet": "CSS",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "问题",
@@ -95,11 +105,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src\components\user" />
       <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src\components\record" />
       <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src\components\goods" />
       <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src\components\goodstype" />
       <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src\components\storage" />
-      <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src\components\user" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Develop\idea code\WarehouseManagement\wms-web\src" />
@@ -136,7 +146,8 @@
       <workItem from="1783143202011" duration="23441000" />
       <workItem from="1783234656275" duration="8303000" />
       <workItem from="1783243003248" duration="12277000" />
-      <workItem from="1783314854316" duration="21205000" />
+      <workItem from="1783314854316" duration="21259000" />
+      <workItem from="1783402118510" duration="23223000" />
     </task>
     <servers />
   </component>
