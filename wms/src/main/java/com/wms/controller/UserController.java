@@ -104,7 +104,6 @@ public class UserController {
         //queryWrapper.eq(User::getName,user.getName());
         return Result.success(userService.list(queryWrapper));
     }
-
     //分页查询
     //直接查询可以直接新增查询条件，通过map.get()获取即可
     @PostMapping("/listPage")
