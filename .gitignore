@@ -1,0 +1,11 @@
+.idea/
+*.iml
+
+target/
+**/target/
+
+node_modules/
+dist/
+
+application-local.properties
+application-local.yml
