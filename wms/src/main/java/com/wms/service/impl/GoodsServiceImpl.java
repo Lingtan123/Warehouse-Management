@@ -1,25 +1,20 @@
 package com.wms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wms.auth.CurrentUser;
+import com.wms.auth.UserContext;
 import com.wms.common.GoodsSaveRequest;
 import com.wms.entity.Goods;
 import com.wms.entity.Record;
 import com.wms.mapper.GoodsMapper;
 import com.wms.mapper.RecordMapper;
 import com.wms.service.IGoodsService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author nobody
- * @since 2026-07-06
- */
 @Service
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements IGoodsService {
 
@@ -39,9 +34,21 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         if (!save(goods)) {
             return false;
         }
-        //同步生成订单记录
+
+        request.setId(goods.getId());
+        CurrentUser currentUser = UserContext.getCurrentUser();
+        if (currentUser != null) {
+            request.setAdminId(currentUser.getId());
+            request.setAdminName(currentUser.getName());
+        }
+
         Record record = buildRecord(goods.getId(), request, request.getCount());
-        return recordMapper.insert(record) > 0;
+        //插入失败事务必须回滚，手动调用回滚
+        if (recordMapper.insert(record) <= 0) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
+        return true;
     }
 
     @Override

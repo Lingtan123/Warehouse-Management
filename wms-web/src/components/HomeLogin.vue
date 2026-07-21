@@ -6,40 +6,42 @@ export default {
   data() {
     return {
       confirm_disabled: false,
-      loginForm:{
+      loginForm: {
         no: '',
         password: '',
       },
       rules: {
-        no:[
+        no: [
           {required: true, message: '请输入账号', trigger: 'blur'},
         ],
-        password:[
+        password: [
           {required: true, message: '请输入密码', trigger: 'blur'},
         ]
       }
     }
   },
   methods: {
-    confirm(){
+    confirm() {
       this.confirm_disabled = true
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          request.post("/user/login",this.loginForm).then(res => {
-            if (res.code == 200) {
-              sessionStorage.setItem("CurUser",JSON.stringify(res.data.user));
-              this.$store.commit("setMenu",res.data.menu);
+          request.post("/user/login", this.loginForm).then(res => {
+            if (res.code === 200) {
+              sessionStorage.setItem("Token", res.data.token);
+              sessionStorage.setItem("CurUser", JSON.stringify(res.data.user));
+              this.$store.commit("setMenu", res.data.menu);
               this.$router.replace('/Home');
-            }else{
+            } else {
               this.confirm_disabled = false
               alert('校验失败，请检查用户名和密码');
               return false;
             }
+          }).catch(() => {
+            this.confirm_disabled = false
           })
-        }else{
+        } else {
           this.confirm_disabled = false
-          console.log('error');
-          return false;
+          return false
         }
       })
     }
@@ -95,7 +97,7 @@ export default {
   top: 25px;
   left: 25px;
 }
-.login-title{
+.login-title {
   margin: 20px 0;
   margin-left: 50px;
   text-align: center;

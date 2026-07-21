@@ -5,38 +5,48 @@ const request = axios.create({
     timeout: 5000
 })
 
-// request 拦截器
-// 可以自请求发送前对请求做一些处理
-// 比如统一加token，对请求参数统一加密
-request.interceptors.request.use(config => {
-    config.headers['Content-Type'] = 'application/json;charset=utf-8';
+let redirectingToLogin = false
 
-    // config.headers['token'] = user.token;  // 设置请求头
+function handleUnauthorized(message) {
+    if (redirectingToLogin) {
+        return
+    }
+    redirectingToLogin = true
+    sessionStorage.clear()
+    alert(message || '登录已过期，请重新登录')
+    window.location.href = '/'
+}
+
+request.interceptors.request.use(config => {
+    config.headers['Content-Type'] = 'application/json;charset=utf-8'
+
+    const token = sessionStorage.getItem('Token')
+    if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`
+    }
     return config
 }, error => {
     return Promise.reject(error)
-});
+})
 
-// response 拦截器
-// 可以在接口响应后统一处理结果
 request.interceptors.response.use(
     response => {
-        let res = response.data;
-        // 如果是返回的文件
+        let res = response.data
         if (response.config.responseType === 'blob') {
             return res
         }
-        // 兼容服务端返回的字符串数据
         if (typeof res === 'string') {
             res = res ? JSON.parse(res) : res
         }
-        return res;
+        return res
     },
     error => {
-        console.log('err' + error) // for debug
+        if (error.response && error.response.status === 401) {
+            const message = error.response.data && error.response.data.msg
+            handleUnauthorized(message)
+        }
         return Promise.reject(error)
     }
 )
-
 
 export default request

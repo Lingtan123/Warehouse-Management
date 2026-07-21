@@ -1,192 +1,219 @@
 package com.wms.controller;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wms.auth.CurrentUser;
+import com.wms.auth.JwtUtils;
+import com.wms.auth.UserContext;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Menu;
 import com.wms.entity.User;
 import com.wms.service.IMenuService;
 import com.wms.service.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author nobody
- * @since 2026-05-26
- */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    @GetMapping("")
-    public String FirstPage(){
-        return "This is FirstPage";
-    }
-
-
     @Autowired
     private IUserService userService;
+
     @Autowired
     private IMenuService menuService;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @GetMapping("")
+    public String firstPage() {
+        return "This is FirstPage";
+    }
+
     @GetMapping("/list")
-    public Result listAll(){
+    public Result listAll() {
         return Result.success(userService.listAll());
     }
 
-    //新增
     @PostMapping("/save")
-    public Result save(@RequestBody User user){
-        return userService.save(user) ? Result.success() : Result.fail();
+    public Result save(@RequestBody User user) {
+        boolean saved = userService.save(user);
+        if (saved) {
+            log.info("event=CREATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                    operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
+            return Result.success();
+        }
+
+        log.warn("event=CREATE_USER_FAIL operatorId={} operatorNo={} operatorName={} targetUserNo={} targetUserName={} targetRoleId={}",
+                operatorId(), operatorNo(), operatorName(), user.getNo(), user.getName(), user.getRoleId());
+        return Result.fail();
     }
-    //修改
+
     @PostMapping("/mod")
-    public Result mod(@RequestBody User user){
-        return userService.updateById(user) ? Result.success() : Result.fail();
+    public Result mod(@RequestBody User user) {
+        boolean updated = userService.updateById(user);
+        if (updated) {
+            log.info("event=UPDATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                    operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
+            return Result.success();
+        }
+
+        log.warn("event=UPDATE_USER_FAIL operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
+        return Result.fail();
     }
-    //新增或修改
+
     @PostMapping("/saveOrMod")
-    public boolean saveOrMod(@RequestBody User user){
+    public boolean saveOrMod(@RequestBody User user) {
         return userService.saveOrUpdate(user);
     }
 
-    //删除
     @GetMapping("/delete")
-    public Result delete(int id){
-        return userService.removeById(id) ? Result.success() : Result.fail();
+    public Result delete(int id) {
+        User targetUser = userService.getById(id);
+        boolean removed = userService.removeById(id);
+        if (removed) {
+            log.info("event=DELETE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                    operatorId(), operatorNo(), operatorName(),
+                    targetUser == null ? id : targetUser.getId(),
+                    targetUser == null ? null : targetUser.getNo(),
+                    targetUser == null ? null : targetUser.getName(),
+                    targetUser == null ? null : targetUser.getRoleId());
+            return Result.success();
+        }
+
+        log.warn("event=DELETE_USER_FAIL operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                operatorId(), operatorNo(), operatorName(),
+                targetUser == null ? id : targetUser.getId(),
+                targetUser == null ? null : targetUser.getNo(),
+                targetUser == null ? null : targetUser.getName(),
+                targetUser == null ? null : targetUser.getRoleId());
+        return Result.fail();
     }
 
-    //根据账号查询
     @GetMapping("/findByNo")
-    public Result findByNo(@RequestParam String no){
+    public Result findByNo(@RequestParam String no) {
         List<User> list = userService.lambdaQuery().eq(User::getNo, no).list();
         return !list.isEmpty() ? Result.success(list) : Result.fail();
     }
 
-    //登录
     @PostMapping("/login")
-    public Result login(@RequestBody User user){
-        List<User> list =  userService.lambdaQuery().eq(User::getNo, user.getNo())
-                .eq(User::getPassword,user.getPassword())
+    public Result login(@RequestBody User user) {
+        List<User> list = userService.lambdaQuery().eq(User::getNo, user.getNo())
+                .eq(User::getPassword, user.getPassword())
                 .list();
-        if(!list.isEmpty()){
-            User user1 = list.get(0);
-            List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuRight,user1.getRoleId()).list();
-            HashMap map = new HashMap<>();
-            map.put("user",user1);
-            map.put("menu",menuList);
+        if (!list.isEmpty()) {
+            User loginUser = list.get(0);
+            List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuRight, loginUser.getRoleId()).list();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("token", jwtUtils.generateToken(loginUser));
+            map.put("user", loginUser);
+            map.put("menu", menuList);
+
+            log.info("event=LOGIN_SUCCESS userId={} no={} name={} roleId={}",
+                    loginUser.getId(), loginUser.getNo(), loginUser.getName(), loginUser.getRoleId());
             return Result.success(map);
         }
 
+        log.warn("event=LOGIN_FAIL no={} reason=invalid_credentials", user.getNo());
         return Result.fail();
     }
 
-    //查询（模糊、匹配）
     @PostMapping("/listP")
-    public Result listP(@RequestBody User user){
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
-        if(user.getName() != null){
+    public Result listP(@RequestBody User user) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        if (user.getName() != null) {
             queryWrapper.like(User::getName, user.getName());
         }
-       // queryWrapper.like(User::getName,user.getName());
-        //like模糊匹配 eq精确匹配
-        //queryWrapper.eq(User::getName,user.getName());
         return Result.success(userService.list(queryWrapper));
     }
-    //分页查询
-    //直接查询可以直接新增查询条件，通过map.get()获取即可
+
     @PostMapping("/listPage")
-    public Result listPage(@RequestBody HashMap map){
-        System.out.println(map);
-        int pageNum = map.get("pageNum") == null ? 1 : ((Number)map.get("pageNum")).intValue();
-        int pageSize = map.get("pageSize") == null ? 10 : ((Number)map.get("pageSize")).intValue();
-        String name = map.get("name").toString();
-        String id = map.get("id").toString();
+    public Result listPage(@RequestBody HashMap map) {
+        int pageNum = map.get("pageNum") == null ? 1 : ((Number) map.get("pageNum")).intValue();
+        int pageSize = map.get("pageSize") == null ? 10 : ((Number) map.get("pageSize")).intValue();
+        String name = map.get("name") == null ? "" : map.get("name").toString();
+        String id = map.get("id") == null ? "" : map.get("id").toString();
         Page<User> page = new Page<>(pageNum, pageSize);
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(User::getName,name);
-        queryWrapper.eq(User::getId,id);
+        queryWrapper.like(User::getName, name);
+        queryWrapper.eq(User::getId, id);
 
-        IPage iPage = userService.page(page, queryWrapper);
-        System.out.println("Total = " + iPage.getTotal());
-
+        IPage<User> iPage = userService.page(page, queryWrapper);
         return Result.success(iPage.getRecords());
     }
-    //分页查询（自定义Page对象）
-    //自定义Page对象可以不修改自定义的实体类，使用Hashmap封装所有数据，然后再通过map.get()调用
+
     @PostMapping("/listPageC")
-    public Result listPageC(@RequestBody QueryPageParam query){
-        System.out.println(query);
+    public Result listPageC(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
-        String name =(String) param.get("name");
+        String name = (String) param.get("name");
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(User::getName,name);
+        queryWrapper.like(User::getName, name);
 
-        IPage iPage = userService.page(page, queryWrapper);
-
-        System.out.println("total == "+ iPage.getTotal());
-
+        IPage<User> iPage = userService.page(page, queryWrapper);
         return Result.success(iPage.getRecords());
     }
 
-    //分页查询（自定义SQL语句）
     @PostMapping("/listPageCC")
-    public Result listPageCC(@RequestBody QueryPageParam query){
-        System.out.println(query);
+    public Result listPageCC(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
-
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
 
-        String name =(String) param.get("name");
-        queryWrapper.like(User::getName,name);
+        String name = (String) param.get("name");
+        queryWrapper.like(User::getName, name);
 
-        IPage iPage = userService.pageCC(page,queryWrapper);
-        System.out.println("total == "+ iPage.getTotal());
+        IPage<User> iPage = userService.pageCC(page, queryWrapper);
         return Result.success(iPage.getRecords());
     }
 
-    //分页查询（后端返回数据封装）（和自定义分页使用同一份返回）
-    //使用自定义类Result封装
     @PostMapping("/listPageC1")
-    public Result listPageC1(@RequestBody QueryPageParam query){
-        System.out.println(query);
+    public Result listPageC1(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         Page<User> page = new Page<>(query.getPageNum(), query.getPageSize());
-        String name =(String) param.get("name");
-        String sex =(String) param.get("sex");
-        String roleId =(String) param.get("roleId");
+        String name = (String) param.get("name");
+        String sex = (String) param.get("sex");
+        String roleId = (String) param.get("roleId");
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-
-        if(StringUtils.isNotBlank(name)){
-            queryWrapper.like(User::getName,name);
+        if (StringUtils.isNotBlank(name)) {
+            queryWrapper.like(User::getName, name);
         }
-        if(StringUtils.isNotBlank(sex)){
-            queryWrapper.like(User::getSex,sex);
+        if (StringUtils.isNotBlank(sex)) {
+            queryWrapper.like(User::getSex, sex);
         }
-        if(StringUtils.isNotBlank(roleId)){
-            queryWrapper.like(User::getRoleId,roleId);
+        if (StringUtils.isNotBlank(roleId)) {
+            queryWrapper.like(User::getRoleId, roleId);
         }
 
-        IPage iPage = userService.page(page, queryWrapper);
+        IPage<User> iPage = userService.page(page, queryWrapper);
+        return Result.success(iPage.getTotal(), iPage.getRecords());
+    }
 
-        System.out.println("total == "+ iPage.getTotal());
+    private Integer operatorId() {
+        CurrentUser currentUser = UserContext.getCurrentUser();
+        return currentUser == null ? null : currentUser.getId();
+    }
 
-        return Result.success(iPage.getTotal(),iPage.getRecords());
+    private String operatorNo() {
+        CurrentUser currentUser = UserContext.getCurrentUser();
+        return currentUser == null ? null : currentUser.getNo();
+    }
+
+    private String operatorName() {
+        CurrentUser currentUser = UserContext.getCurrentUser();
+        return currentUser == null ? null : currentUser.getName();
     }
 }
