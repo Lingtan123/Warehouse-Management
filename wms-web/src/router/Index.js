@@ -24,7 +24,7 @@ export const staticRoutes = [
                 path: '/Admin',
                 name: 'admin',
                 meta:{
-                    title:'管理员管理'
+                    title:'项目组长管理'
                 },
                 component:()=>import('@/components/admin/AdminManage.vue'),
             },
@@ -32,7 +32,7 @@ export const staticRoutes = [
                 path: '/User',
                 name: 'user',
                 meta:{
-                    title:'用户管理'
+                    title:'员工管理'
                 },
                 component:()=>import('@/components/user/UserManage.vue'),
             },

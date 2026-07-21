@@ -59,7 +59,7 @@ public class Menu implements Serializable {
     private String menuClick;
 
     /**
-     * 权限 0超级管理员 1管理员 2用户 可以逗号组合使用
+     * 权限 0超级管理员 1项目组长 2员工 可以逗号组合使用
      */
     @TableField("menuRight")
     private String menuRight;

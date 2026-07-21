@@ -271,7 +271,7 @@ export default{
         <template slot-scope="scope">
           <el-tag
               :type=" scope.row.roleId === 1 ? 'success' : 'warning'  "
-              disable-transitions>{{scope.row.roleId === 1 ? '管理员' : '用户' }}</el-tag>
+              disable-transitions>{{scope.row.roleId === 1 ? '项目组长' : '员工' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="phone" label="电话" width="220">
@@ -338,8 +338,8 @@ export default{
         </el-form-item>
         <el-form-item label="角色" prop="roleId">
           <el-radio-group v-model="form.roleId">
-            <el-radio label="1">管理员</el-radio>
-            <el-radio label="2">用户</el-radio>
+            <el-radio label="1">项目组长</el-radio>
+            <el-radio label="2">员工</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>

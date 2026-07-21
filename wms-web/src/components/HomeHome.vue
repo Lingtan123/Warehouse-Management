@@ -62,7 +62,7 @@ export default {
     },
     roleLabel() {
       const roleId = Number(this.user.roleId);
-      return roleId === 0 ? "超级管理员" : (roleId === 1 ? "管理员" : "用户");
+      return roleId === 0 ? "超级管理员" : (roleId === 1 ? "项目组长" : "员工");
     }
   },
   methods: {

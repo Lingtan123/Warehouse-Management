@@ -68,7 +68,7 @@ public class User implements Serializable {
     private String phone;
 
     /**
-     * 角色 0超级管理员 1普通管理员 2普通账号
+     * 角色 0超级管理员 1项目组长 2员工
      */
     @TableField("role_id")
     private Integer roleId;

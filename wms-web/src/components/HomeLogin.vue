@@ -27,7 +27,6 @@ export default {
         if (valid) {
           request.post("/user/login",this.loginForm).then(res => {
             if (res.code == 200) {
-              //存储，跳转到主页
               sessionStorage.setItem("CurUser",JSON.stringify(res.data.user));
               this.$store.commit("setMenu",res.data.menu);
               this.$router.replace('/Home');
@@ -52,7 +51,7 @@ export default {
   <div class="loginBody">
     <div class="loginDiv">
       <div class="loginContent">
-        <h1 class="login-title">用户登录</h1>
+        <h1 class="login-title">员工登录</h1>
         <el-form :model="loginForm" label-width="100px" :rules="rules" ref="loginForm">
           <el-form-item label="账号" prop="no">
             <el-input style="" type="text" v-model="loginForm.no"

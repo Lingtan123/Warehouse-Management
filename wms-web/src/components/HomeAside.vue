@@ -5,11 +5,11 @@ export default {
     return {
       /*menu:[{
           menuClick:'Admin',
-          menuName:'管理员管理',
+          menuName:'项目组长管理',
           menuIcon:'el-icon-s-custom',
         },{
           menuClick:'User',
-          menuName:'用户管理',
+          menuName:'员工管理',
           menuIcon:'el-icon-user-solid',
         }
       ]*/

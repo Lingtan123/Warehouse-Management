@@ -111,7 +111,7 @@ export default{
         <template slot-scope="scope">
           <el-tag
               :type=" scope.row.roleId === 1 ? 'success' : 'warning'  "
-              disable-transitions>{{scope.row.roleId === 1 ? '管理员' : '用户' }}</el-tag>
+              disable-transitions>{{scope.row.roleId === 1 ? '项目组长' : '员工' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="phone" label="电话">

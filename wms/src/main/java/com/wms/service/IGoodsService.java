@@ -1,5 +1,6 @@
 package com.wms.service;
 
+import com.wms.common.GoodsSaveRequest;
 import com.wms.entity.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGoodsService extends IService<Goods> {
 
+    boolean saveWithInitialRecord(GoodsSaveRequest request);
+
+    boolean removeWithRecordCheck(Integer id);
+
+    boolean hasEnoughStock(GoodsSaveRequest request);
 }
