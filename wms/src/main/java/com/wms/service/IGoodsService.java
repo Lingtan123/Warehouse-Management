@@ -1,6 +1,9 @@
 package com.wms.service;
 
-import com.wms.common.GoodsSaveRequest;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wms.dto.GoodsQuery;
+import com.wms.dto.GoodsRequest;
+import com.wms.dto.InGoodsRequest;
 import com.wms.entity.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,9 +17,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGoodsService extends IService<Goods> {
 
-    boolean saveWithInitialRecord(GoodsSaveRequest request);
+    boolean createOrInGoods(InGoodsRequest request);
 
     boolean removeWithRecordCheck(Integer id);
 
-    boolean hasEnoughStock(GoodsSaveRequest request);
+    boolean checkEnoughStock(InGoodsRequest request);
+
+    boolean updateGoods(GoodsRequest goods);
+
+    IPage<Goods> listPageC(GoodsQuery query);
 }

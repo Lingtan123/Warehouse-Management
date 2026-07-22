@@ -1,8 +1,8 @@
 package com.wms.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.wms.common.GoodsSaveRequest;
-import com.wms.common.QueryPageParam;
+import com.wms.dto.InGoodsRequest;
+import com.wms.dto.RecordQuery;
 import com.wms.common.Result;
 import com.wms.exception.AllException;
 import com.wms.exception.myException;
@@ -26,14 +26,14 @@ public class RecordController {
     }
 
     @PostMapping("/list")
-    public Result list(@RequestBody QueryPageParam query) {
+    public Result list(@RequestBody RecordQuery query) {
         IPage<?> iPage = recordService.pageRecord(query);
         return Result.success(iPage.getTotal(), iPage.getRecords());
     }
 
     @PostMapping("/save")
-    public Result save(@RequestBody GoodsSaveRequest request) {
-        recordService.saveInventoryRecord(request);
+    public Result save(@RequestBody InGoodsRequest request) {
+        recordService.createInventoryRecord(request);
         return Result.success();
     }
 }

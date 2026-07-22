@@ -1,10 +1,16 @@
 package com.wms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.auth.CurrentUser;
 import com.wms.auth.UserContext;
-import com.wms.common.GoodsSaveRequest;
+import com.wms.dto.GoodsQuery;
+import com.wms.dto.GoodsRequest;
+import com.wms.dto.InGoodsRequest;
 import com.wms.entity.Goods;
 import com.wms.entity.Record;
 import com.wms.exception.AllException;
@@ -13,6 +19,7 @@ import com.wms.mapper.GoodsMapper;
 import com.wms.mapper.RecordMapper;
 import com.wms.service.IGoodsService;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +30,15 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     private RecordMapper recordMapper;
 
     @Override
+    public boolean updateGoods(GoodsRequest request){
+        Goods good =  new Goods();
+        BeanUtils.copyProperties(request,good);
+        return updateById(good);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveWithInitialRecord(GoodsSaveRequest request) {
+    public boolean createOrInGoods(InGoodsRequest request) {
         Goods goods = new Goods();
         goods.setName(request.getName());
         goods.setStorage(request.getStorage());
@@ -66,12 +80,33 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
-    public boolean hasEnoughStock(GoodsSaveRequest request) {
+    public boolean checkEnoughStock(InGoodsRequest request) {
         Goods goods = getById(request.getId());
         return goods != null && goods.getCount() != null && goods.getCount() >= request.getCount();
     }
 
-    private Record buildRecord(Integer goodsId, GoodsSaveRequest request, Integer count) {
+    @Override
+    public IPage<Goods> listPageC(GoodsQuery query) {
+        Page<Goods> page = new Page<>(query.getPageNum(), query.getPageSize());
+
+        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
+        String name = query.getName();
+        String storage = query.getStorage();
+        String goodstype = query.getGoodstype();
+        if (StringUtils.isNotBlank(name)) {
+            queryWrapper.like(Goods::getName, name);
+        }
+        if (StringUtils.isNotBlank(storage)) {
+            queryWrapper.eq(Goods::getStorage, storage);
+        }
+        if (StringUtils.isNotBlank(goodstype)) {
+            queryWrapper.eq(Goods::getGoodstype, goodstype);
+        }
+        IPage<Goods> iPage = this.page(page, queryWrapper);
+        return iPage;
+    }
+
+    private Record buildRecord(Integer goodsId, InGoodsRequest request, Integer count) {
         Record record = new Record();
         record.setGoods(goodsId);
         record.setUserId(request.getUserId());

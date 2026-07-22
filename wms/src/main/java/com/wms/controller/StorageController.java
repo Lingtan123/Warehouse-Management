@@ -1,13 +1,11 @@
 package com.wms.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.auth.CurrentUser;
 import com.wms.auth.UserContext;
-import com.wms.common.QueryPageParam;
+import com.wms.dto.StorageQuery;
 import com.wms.common.Result;
+import com.wms.dto.StorageRequest;
 import com.wms.entity.Storage;
 import com.wms.exception.AllException;
 import com.wms.exception.myException;
@@ -15,8 +13,6 @@ import com.wms.service.IStorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -27,8 +23,8 @@ public class StorageController {
     private IStorageService storageService;
 
     @PostMapping("/save")
-    public Result save(@RequestBody Storage storage) {
-        if (!storageService.save(storage)) {
+    public Result save(@RequestBody StorageRequest storage) {
+        if (!storageService.createStorage(storage)) {
             throw new myException(AllException.STORAGE_INSERT_ERROR);
         }
         log.info("event=CREATE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
@@ -37,8 +33,8 @@ public class StorageController {
     }
 
     @PostMapping("/mod")
-    public Result mod(@RequestBody Storage storage) {
-        if (!storageService.updateById(storage)) {
+    public Result mod(@RequestBody StorageRequest storage) {
+        if (!storageService.updateStorage(storage)) {
             throw new myException(AllException.STORAGE_UPDATE_ERROR);
         }
         log.info("event=UPDATE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
@@ -60,17 +56,8 @@ public class StorageController {
     }
 
     @PostMapping("/listPageC")
-    public Result listPageC(@RequestBody QueryPageParam query) {
-        HashMap param = query.getParam();
-        Page<Storage> page = new Page<>(query.getPageNum(), query.getPageSize());
-        String name = (String) param.get("name");
-
-        LambdaQueryWrapper<Storage> queryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(name)) {
-            queryWrapper.like(Storage::getName, name);
-        }
-
-        IPage<Storage> iPage = storageService.page(page, queryWrapper);
+    public Result listPageC(@RequestBody StorageQuery query) {
+        IPage<Storage> iPage = storageService.listPageC(query);
         return Result.success(iPage.getTotal(), iPage.getRecords());
     }
 

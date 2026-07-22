@@ -106,11 +106,9 @@ export default{
       request.post('/user/listPageC1',{
         pageNum:this.pageNum,
         pageSize:this.pageSize,
-        param: {
-          name: this.name,
-          sex: this.sex,
-          roleId: '1'
-        }
+        name: this.name,
+        sex: this.sex,
+        roleId: '1'
       }).then(res=>{
         if(res.code == 200){
           this.tableData = res.data

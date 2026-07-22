@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wms.dto.UserQuery;
+import com.wms.dto.UserRequest;
 import com.wms.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,4 +23,13 @@ public interface IUserService extends IService<User> {
     List<User> listAll();
 
     IPage<User> pageCC(Page<User> page, Wrapper<User> queryWrapper);
+
+    boolean createUser(UserRequest request);
+
+    boolean updateUser(UserRequest request);
+
+    boolean saveOrUpdateUser(UserRequest request);
+
+    IPage<User> listPageC1(UserQuery query);
+
 }

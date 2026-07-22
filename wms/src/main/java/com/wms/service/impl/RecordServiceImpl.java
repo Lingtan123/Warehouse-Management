@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.auth.CurrentUser;
 import com.wms.auth.UserContext;
-import com.wms.common.GoodsSaveRequest;
-import com.wms.common.QueryPageParam;
-import com.wms.common.RecordResult;
+import com.wms.dto.InGoodsRequest;
+import com.wms.dto.RecordQuery;
+import com.wms.dto.RecordRequest;
 import com.wms.entity.Goods;
 import com.wms.entity.Record;
 import com.wms.exception.AllException;
@@ -21,9 +21,6 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-
 @Slf4j
 @Service
 public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements IRecordService {
@@ -34,14 +31,13 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     private GoodsMapper goodsMapper;
 
     @Override
-    public IPage<RecordResult> pageRecord(QueryPageParam query) {
-        HashMap param = query.getParam();
-        Page<RecordResult> page = new Page<>(query.getPageNum(), query.getPageSize());
-        String name = (String) param.get("name");
-        String type = (String) param.get("goodstype");
-        String storage = (String) param.get("storage");
-        String roleId = (String) param.get("roleId");
-        String userId = (String) param.get("userId");
+    public IPage<RecordRequest> pageRecord(RecordQuery query) {
+        Page<RecordRequest> page = new Page<>(query.getPageNum(), query.getPageSize());
+        String name = query.getName();
+        String type = query.getGoodstype();
+        String storage = query.getStorage();
+        String roleId = query.getRoleId();
+        String userId = query.getUserId();
 
         QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
         queryWrapper.apply(" r.goods = g.id and g.storage = s.id and g.goodstype = gt.id ");
@@ -64,7 +60,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveInventoryRecord(GoodsSaveRequest request) {
+    public boolean createInventoryRecord(InGoodsRequest request) {
         Goods goods = goodsMapper.selectById(request.getId());
         if (goods == null || goods.getCount() == null) {
             log.warn("event=INVENTORY_OPERATE_FAIL operatorId={} operatorNo={} operatorName={} goodsId={} action={} reason=goods_not_found",
@@ -114,7 +110,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         return true;
     }
 
-    private int resolveDelta(GoodsSaveRequest request) {
+    private int resolveDelta(InGoodsRequest request) {
         int count = request.getCount();
         if ("2".equals(request.getAction())) {
             return -count;
@@ -122,7 +118,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         return count;
     }
 
-    private String actionName(GoodsSaveRequest request) {
+    private String actionName(InGoodsRequest request) {
         return "2".equals(request.getAction()) ? "OUT_STOCK" : "IN_STOCK";
     }
 

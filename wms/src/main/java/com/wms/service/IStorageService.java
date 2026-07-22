@@ -1,5 +1,8 @@
 package com.wms.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wms.dto.StorageQuery;
+import com.wms.dto.StorageRequest;
 import com.wms.entity.Storage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +16,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IStorageService extends IService<Storage> {
 
+    boolean createStorage(StorageRequest request);
+
+    boolean updateStorage(StorageRequest request);
+
+    IPage<Storage> listPageC(StorageQuery query);
 }

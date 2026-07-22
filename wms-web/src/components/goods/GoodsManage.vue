@@ -140,11 +140,9 @@ export default{
       request.post('/goods/listPageC',{
         pageNum:this.pageNum,
         pageSize:this.pageSize,
-        param: {
-          name: this.name,
-          storage: this.storage+'',
-          goodstype: this.goodstype+'',
-        }
+        name: this.name,
+        storage: this.storage+'',
+        goodstype: this.goodstype+'',
       }).then(res=>{
         if(res.code == 200){
           this.tableData = res.data

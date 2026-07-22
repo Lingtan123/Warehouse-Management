@@ -47,9 +47,7 @@ export default{
       request.post('/storage/listPageC',{
         pageNum:this.pageNum,
         pageSize:this.pageSize,
-        param: {
-          name: this.name,
-        }
+        name: this.name,
       }).then(res=>{
         if(res.code == 200){
           this.tableData = res.data

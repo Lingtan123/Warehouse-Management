@@ -42,13 +42,11 @@ export default{
       request.post('/record/list',{
         pageNum:this.pageNum,
         pageSize:this.pageSize,
-        param: {
-          name: this.name,
-          storage: this.storage+'',
-          goodstype: this.goodstype+'',
-          roleId:this.CurUser.roleId+'',
-          userId:this.CurUser.id+'',
-        }
+        name: this.name,
+        storage: this.storage+'',
+        goodstype: this.goodstype+'',
+        roleId:this.CurUser.roleId+'',
+        userId:this.CurUser.id+'',
       }).then(res=>{
         if(res.code == 200){
           this.tableData = res.data

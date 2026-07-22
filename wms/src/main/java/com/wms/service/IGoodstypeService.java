@@ -1,5 +1,8 @@
 package com.wms.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wms.dto.GoodstypeQuery;
+import com.wms.dto.GoodstypeRequest;
 import com.wms.entity.Goodstype;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +15,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2026-07-06
  */
 public interface IGoodstypeService extends IService<Goodstype> {
+    boolean createGoodstype(GoodstypeRequest request);
 
+    boolean updateGoodstype(GoodstypeRequest request);
+
+    IPage<Goodstype> listPageC(GoodstypeQuery query);
 }

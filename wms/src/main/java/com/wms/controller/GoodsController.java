@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.auth.CurrentUser;
 import com.wms.auth.UserContext;
-import com.wms.common.GoodsSaveRequest;
-import com.wms.common.QueryPageParam;
+import com.wms.dto.GoodsQuery;
+import com.wms.dto.GoodsRequest;
+import com.wms.dto.InGoodsRequest;
+import com.wms.dto.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Goods;
 import com.wms.exception.AllException;
@@ -28,8 +30,8 @@ public class GoodsController {
     private IGoodsService goodsService;
 
     @PostMapping("/save")
-    public Result save(@RequestBody GoodsSaveRequest request) {
-        goodsService.saveWithInitialRecord(request);
+    public Result save(@RequestBody InGoodsRequest request) {
+        goodsService.createOrInGoods(request);
         log.info("event=CREATE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} storageId={} goodstypeId={} initialCount={} executorUserId={} executorUserName={}",
                 operatorId(), operatorNo(), operatorName(),
                 request.getId(), request.getName(), request.getStorage(), request.getGoodstype(), request.getCount(),
@@ -38,8 +40,8 @@ public class GoodsController {
     }
 
     @PostMapping("/mod")
-    public Result mod(@RequestBody Goods goods) {
-        if (!goodsService.updateById(goods)) {
+    public Result mod(@RequestBody GoodsRequest goods) {
+        if (!goodsService.updateGoods(goods)) {
             throw new myException(AllException.GOODS_UPDATE_ERROR);
         }
         log.info("event=UPDATE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} storageId={} goodstypeId={} count={}",
@@ -59,31 +61,14 @@ public class GoodsController {
     }
 
     @PostMapping("/getCount")
-    public Result getCount(@RequestBody GoodsSaveRequest request) {
-        return goodsService.hasEnoughStock(request) ? Result.success() : Result.fail();
+    public Result getCount(@RequestBody InGoodsRequest request) {
+        return goodsService.checkEnoughStock(request) ? Result.success() : Result.fail();
     }
 
     @PostMapping("/listPageC")
-    public Result listPageC(@RequestBody QueryPageParam query) {
-        HashMap param = query.getParam();
-        Page<Goods> page = new Page<>(query.getPageNum(), query.getPageSize());
-        String name = (String) param.get("name");
-        String storage = (String) param.get("storage");
-        String goodstype = (String) param.get("goodstype");
-
-        LambdaQueryWrapper<Goods> queryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(name)) {
-            queryWrapper.like(Goods::getName, name);
-        }
-        if (StringUtils.isNotBlank(storage)) {
-            queryWrapper.eq(Goods::getStorage, storage);
-        }
-        if (StringUtils.isNotBlank(goodstype)) {
-            queryWrapper.eq(Goods::getGoodstype, goodstype);
-        }
-
-        IPage<Goods> iPage = goodsService.page(page, queryWrapper);
-        return Result.success(iPage.getTotal(), iPage.getRecords());
+    public Result listPageC(@RequestBody GoodsQuery query) {
+        IPage<Goods> iPage = goodsService.listPageC(query);
+        return Result.success(iPage.getTotal(),iPage.getRecords());
     }
 
     private Integer operatorId() {

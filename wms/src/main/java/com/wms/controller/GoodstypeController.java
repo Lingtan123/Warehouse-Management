@@ -1,12 +1,10 @@
 package com.wms.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.auth.CurrentUser;
 import com.wms.auth.UserContext;
-import com.wms.common.QueryPageParam;
+import com.wms.dto.GoodstypeQuery;
+import com.wms.dto.GoodstypeRequest;
 import com.wms.common.Result;
 import com.wms.entity.Goodstype;
 import com.wms.exception.AllException;
@@ -15,8 +13,6 @@ import com.wms.service.IGoodstypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -27,8 +23,8 @@ public class GoodstypeController {
     private IGoodstypeService goodstypeService;
 
     @PostMapping("/save")
-    public Result save(@RequestBody Goodstype goodstype) {
-        if (!goodstypeService.save(goodstype)) {
+    public Result save(@RequestBody GoodstypeRequest goodstype) {
+        if (!goodstypeService.createGoodstype(goodstype)) {
             throw new myException(AllException.GOODSTYPE_INSERT_ERROR);
         }
         log.info("event=CREATE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
@@ -37,8 +33,8 @@ public class GoodstypeController {
     }
 
     @PostMapping("/mod")
-    public Result mod(@RequestBody Goodstype goodstype) {
-        if (!goodstypeService.updateById(goodstype)) {
+    public Result mod(@RequestBody GoodstypeRequest goodstype) {
+        if (!goodstypeService.updateGoodstype(goodstype)) {
             throw new myException(AllException.GOODSTYPE_UPDATE_ERROR);
         }
         log.info("event=UPDATE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
@@ -60,17 +56,8 @@ public class GoodstypeController {
     }
 
     @PostMapping("/listPageC")
-    public Result listPageC(@RequestBody QueryPageParam query) {
-        HashMap param = query.getParam();
-        Page<Goodstype> page = new Page<>(query.getPageNum(), query.getPageSize());
-        String name = (String) param.get("name");
-
-        LambdaQueryWrapper<Goodstype> queryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(name)) {
-            queryWrapper.like(Goodstype::getName, name);
-        }
-
-        IPage<Goodstype> iPage = goodstypeService.page(page, queryWrapper);
+    public Result listPageC(@RequestBody GoodstypeQuery query) {
+        IPage<Goodstype> iPage = goodstypeService.listPageC(query);
         return Result.success(iPage.getTotal(), iPage.getRecords());
     }
 

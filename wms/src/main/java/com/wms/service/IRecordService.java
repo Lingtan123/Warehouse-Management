@@ -1,9 +1,9 @@
 package com.wms.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.wms.common.GoodsSaveRequest;
-import com.wms.common.QueryPageParam;
-import com.wms.common.RecordResult;
+import com.wms.dto.InGoodsRequest;
+import com.wms.dto.RecordQuery;
+import com.wms.dto.RecordRequest;
 import com.wms.entity.Record;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,7 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRecordService extends IService<Record> {
 
-    IPage<RecordResult> pageRecord(QueryPageParam query);
+    IPage<RecordRequest> pageRecord(RecordQuery query);
 
-    boolean saveInventoryRecord(GoodsSaveRequest request);
+    boolean createInventoryRecord(InGoodsRequest request);
 }
