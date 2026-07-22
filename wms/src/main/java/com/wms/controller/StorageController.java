@@ -9,6 +9,8 @@ import com.wms.auth.UserContext;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Storage;
+import com.wms.exception.AllException;
+import com.wms.exception.myException;
 import com.wms.service.IStorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,49 +28,35 @@ public class StorageController {
 
     @PostMapping("/save")
     public Result save(@RequestBody Storage storage) {
-        boolean saved = storageService.save(storage);
-        if (saved) {
-            log.info("event=CREATE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
-                    operatorId(), operatorNo(), operatorName(), storage.getId(), storage.getName());
-            return Result.success();
+        if (!storageService.save(storage)) {
+            throw new myException(AllException.STORAGE_INSERT_ERROR);
         }
-
-        log.warn("event=CREATE_STORAGE_FAIL operatorId={} operatorNo={} operatorName={} storageName={}",
-                operatorId(), operatorNo(), operatorName(), storage.getName());
-        return Result.fail();
+        log.info("event=CREATE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
+                operatorId(), operatorNo(), operatorName(), storage.getId(), storage.getName());
+        return Result.success();
     }
 
     @PostMapping("/mod")
     public Result mod(@RequestBody Storage storage) {
-        boolean updated = storageService.updateById(storage);
-        if (updated) {
-            log.info("event=UPDATE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
-                    operatorId(), operatorNo(), operatorName(), storage.getId(), storage.getName());
-            return Result.success();
+        if (!storageService.updateById(storage)) {
+            throw new myException(AllException.STORAGE_UPDATE_ERROR);
         }
-
-        log.warn("event=UPDATE_STORAGE_FAIL operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
+        log.info("event=UPDATE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
                 operatorId(), operatorNo(), operatorName(), storage.getId(), storage.getName());
-        return Result.fail();
+        return Result.success();
     }
 
     @GetMapping("/delete")
     public Result delete(int id) {
         Storage storage = storageService.getById(id);
-        boolean removed = storageService.removeById(id);
-        if (removed) {
-            log.info("event=DELETE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
-                    operatorId(), operatorNo(), operatorName(),
-                    storage == null ? id : storage.getId(),
-                    storage == null ? null : storage.getName());
-            return Result.success();
+        if (!storageService.removeById(id)) {
+            throw new myException(AllException.STORAGE_DELETE_ERROR);
         }
-
-        log.warn("event=DELETE_STORAGE_FAIL operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
+        log.info("event=DELETE_STORAGE operatorId={} operatorNo={} operatorName={} storageId={} storageName={}",
                 operatorId(), operatorNo(), operatorName(),
                 storage == null ? id : storage.getId(),
                 storage == null ? null : storage.getName());
-        return Result.fail();
+        return Result.success();
     }
 
     @PostMapping("/listPageC")

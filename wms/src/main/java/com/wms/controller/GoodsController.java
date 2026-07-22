@@ -10,6 +10,8 @@ import com.wms.common.GoodsSaveRequest;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Goods;
+import com.wms.exception.AllException;
+import com.wms.exception.myException;
 import com.wms.service.IGoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,55 +29,33 @@ public class GoodsController {
 
     @PostMapping("/save")
     public Result save(@RequestBody GoodsSaveRequest request) {
-        boolean saved = goodsService.saveWithInitialRecord(request);
-        if (saved) {
-            log.info("event=CREATE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} storageId={} goodstypeId={} initialCount={} executorUserId={} executorUserName={}",
-                    operatorId(), operatorNo(), operatorName(),
-                    request.getId(), request.getName(), request.getStorage(), request.getGoodstype(), request.getCount(),
-                    request.getUserId(), request.getUserName());
-            return Result.success();
-        }
-
-        log.warn("event=CREATE_GOODS_FAIL operatorId={} operatorNo={} operatorName={} goodsName={} storageId={} goodstypeId={} initialCount={} executorUserId={} executorUserName={}",
+        goodsService.saveWithInitialRecord(request);
+        log.info("event=CREATE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} storageId={} goodstypeId={} initialCount={} executorUserId={} executorUserName={}",
                 operatorId(), operatorNo(), operatorName(),
-                request.getName(), request.getStorage(), request.getGoodstype(), request.getCount(),
+                request.getId(), request.getName(), request.getStorage(), request.getGoodstype(), request.getCount(),
                 request.getUserId(), request.getUserName());
-        return Result.fail();
+        return Result.success();
     }
 
     @PostMapping("/mod")
     public Result mod(@RequestBody Goods goods) {
-        boolean updated = goodsService.updateById(goods);
-        if (updated) {
-            log.info("event=UPDATE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} storageId={} goodstypeId={} count={}",
-                    operatorId(), operatorNo(), operatorName(),
-                    goods.getId(), goods.getName(), goods.getStorage(), goods.getGoodstype(), goods.getCount());
-            return Result.success();
+        if (!goodsService.updateById(goods)) {
+            throw new myException(AllException.GOODS_UPDATE_ERROR);
         }
-
-        log.warn("event=UPDATE_GOODS_FAIL operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} storageId={} goodstypeId={} count={}",
+        log.info("event=UPDATE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} storageId={} goodstypeId={} count={}",
                 operatorId(), operatorNo(), operatorName(),
                 goods.getId(), goods.getName(), goods.getStorage(), goods.getGoodstype(), goods.getCount());
-        return Result.fail();
+        return Result.success();
     }
 
     @GetMapping("/delete")
     public Result delete(int id) {
         Goods goods = goodsService.getById(id);
-        boolean removed = goodsService.removeWithRecordCheck(id);
-        if (removed) {
-            log.info("event=DELETE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={}",
-                    operatorId(), operatorNo(), operatorName(),
-                    goods == null ? id : goods.getId(),
-                    goods == null ? null : goods.getName());
-            return Result.success();
-        }
-
-        log.warn("event=DELETE_GOODS_FAIL operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={}",
+        goodsService.removeWithRecordCheck(id);
+        log.info("event=DELETE_GOODS operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={}",
                 operatorId(), operatorNo(), operatorName(),
-                goods == null ? id : goods.getId(),
-                goods == null ? null : goods.getName());
-        return Result.fail();
+                goods == null ? id : goods.getId(), goods == null ? null : goods.getName());
+        return Result.success();
     }
 
     @PostMapping("/getCount")

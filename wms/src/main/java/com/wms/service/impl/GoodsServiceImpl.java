@@ -7,13 +7,14 @@ import com.wms.auth.UserContext;
 import com.wms.common.GoodsSaveRequest;
 import com.wms.entity.Goods;
 import com.wms.entity.Record;
+import com.wms.exception.AllException;
+import com.wms.exception.myException;
 import com.wms.mapper.GoodsMapper;
 import com.wms.mapper.RecordMapper;
 import com.wms.service.IGoodsService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements IGoodsService {
@@ -32,7 +33,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         goods.setRemake(request.getRemake());
 
         if (!save(goods)) {
-            return false;
+            throw new myException(AllException.GOODS_INSERT_ERROR);
         }
 
         request.setId(goods.getId());
@@ -43,10 +44,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         }
 
         Record record = buildRecord(goods.getId(), request, request.getCount());
-        //插入失败事务必须回滚，手动调用回滚
+
         if (recordMapper.insert(record) <= 0) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+            throw new myException(AllException.RECORD_INSERT_ERROR);
         }
         return true;
     }
@@ -57,9 +57,12 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         wrapper.eq(Record::getGoods, id);
         Long recordCount = recordMapper.selectCount(wrapper);
         if (recordCount != null && recordCount > 0) {
-            return false;
+            throw new myException(AllException.GOODS_DELETE_ERROR);
         }
-        return removeById(id);
+        if (!removeById(id)) {
+            throw new myException(AllException.GOODS_DELETE_ERROR);
+        }
+        return true;
     }
 
     @Override

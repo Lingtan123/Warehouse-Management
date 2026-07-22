@@ -11,6 +11,8 @@ import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Menu;
 import com.wms.entity.User;
+import com.wms.exception.AllException;
+import com.wms.exception.myException;
 import com.wms.service.IMenuService;
 import com.wms.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,58 +48,53 @@ public class UserController {
 
     @PostMapping("/save")
     public Result save(@RequestBody User user) {
-        boolean saved = userService.save(user);
-        if (saved) {
-            log.info("event=CREATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
-                    operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
-            return Result.success();
+        if (!userService.save(user)) {
+            throw new myException(AllException.USER_INSERT_ERROR);
         }
-
-        log.warn("event=CREATE_USER_FAIL operatorId={} operatorNo={} operatorName={} targetUserNo={} targetUserName={} targetRoleId={}",
-                operatorId(), operatorNo(), operatorName(), user.getNo(), user.getName(), user.getRoleId());
-        return Result.fail();
+        log.info("event=CREATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
+        return Result.success();
     }
 
     @PostMapping("/mod")
     public Result mod(@RequestBody User user) {
-        boolean updated = userService.updateById(user);
-        if (updated) {
-            log.info("event=UPDATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
-                    operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
-            return Result.success();
+        if (!userService.updateById(user)) {
+            throw new myException(AllException.USER_UPDATE_ERROR);
         }
-
-        log.warn("event=UPDATE_USER_FAIL operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+        log.info("event=UPDATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
                 operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
-        return Result.fail();
+        return Result.success();
     }
 
     @PostMapping("/saveOrMod")
-    public boolean saveOrMod(@RequestBody User user) {
-        return userService.saveOrUpdate(user);
+    public Result saveOrMod(@RequestBody User user) {
+        boolean isCreate = user.getId() == null;
+        if (!userService.saveOrUpdate(user)) {
+            throw new myException(isCreate ? AllException.USER_INSERT_ERROR : AllException.USER_UPDATE_ERROR);
+        }
+        if (isCreate) {
+            log.info("event=CREATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                    operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
+        } else {
+            log.info("event=UPDATE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+                    operatorId(), operatorNo(), operatorName(), user.getId(), user.getNo(), user.getName(), user.getRoleId());
+        }
+        return Result.success();
     }
 
     @GetMapping("/delete")
     public Result delete(int id) {
         User targetUser = userService.getById(id);
-        boolean removed = userService.removeById(id);
-        if (removed) {
-            log.info("event=DELETE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
-                    operatorId(), operatorNo(), operatorName(),
-                    targetUser == null ? id : targetUser.getId(),
-                    targetUser == null ? null : targetUser.getNo(),
-                    targetUser == null ? null : targetUser.getName(),
-                    targetUser == null ? null : targetUser.getRoleId());
-            return Result.success();
+        if (!userService.removeById(id)) {
+            throw new myException(AllException.USER_DELETE_ERROR);
         }
-
-        log.warn("event=DELETE_USER_FAIL operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
+        log.info("event=DELETE_USER operatorId={} operatorNo={} operatorName={} targetUserId={} targetUserNo={} targetUserName={} targetRoleId={}",
                 operatorId(), operatorNo(), operatorName(),
                 targetUser == null ? id : targetUser.getId(),
                 targetUser == null ? null : targetUser.getNo(),
                 targetUser == null ? null : targetUser.getName(),
                 targetUser == null ? null : targetUser.getRoleId());
-        return Result.fail();
+        return Result.success();
     }
 
     @GetMapping("/findByNo")
@@ -111,21 +108,21 @@ public class UserController {
         List<User> list = userService.lambdaQuery().eq(User::getNo, user.getNo())
                 .eq(User::getPassword, user.getPassword())
                 .list();
-        if (!list.isEmpty()) {
-            User loginUser = list.get(0);
-            List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuRight, loginUser.getRoleId()).list();
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("token", jwtUtils.generateToken(loginUser));
-            map.put("user", loginUser);
-            map.put("menu", menuList);
-
-            log.info("event=LOGIN_SUCCESS userId={} no={} name={} roleId={}",
-                    loginUser.getId(), loginUser.getNo(), loginUser.getName(), loginUser.getRoleId());
-            return Result.success(map);
+        if (list.isEmpty()) {
+            log.warn("event=LOGIN_FAIL no={} reason=invalid_credentials", user.getNo());
+            throw new myException(AllException.LOGIN_ERROR);
         }
 
-        log.warn("event=LOGIN_FAIL no={} reason=invalid_credentials", user.getNo());
-        return Result.fail();
+        User loginUser = list.get(0);
+        List<Menu> menuList = menuService.lambdaQuery().like(Menu::getMenuRight, loginUser.getRoleId()).list();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("token", jwtUtils.generateToken(loginUser));
+        map.put("user", loginUser);
+        map.put("menu", menuList);
+
+        log.info("event=LOGIN_SUCCESS userId={} no={} name={} roleId={}",
+                loginUser.getId(), loginUser.getNo(), loginUser.getName(), loginUser.getRoleId());
+        return Result.success(map);
     }
 
     @PostMapping("/listP")

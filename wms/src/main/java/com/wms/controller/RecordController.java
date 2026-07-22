@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.common.GoodsSaveRequest;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
+import com.wms.exception.AllException;
+import com.wms.exception.myException;
 import com.wms.service.IRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +19,10 @@ public class RecordController {
 
     @GetMapping("/delete")
     public Result delete(int id) {
-        return recordService.removeById(id) ? Result.success() : Result.fail();
+        if (!recordService.removeById(id)) {
+            throw new myException(AllException.RECORD_DELETE_ERROR);
+        }
+        return Result.success();
     }
 
     @PostMapping("/list")
@@ -28,6 +33,7 @@ public class RecordController {
 
     @PostMapping("/save")
     public Result save(@RequestBody GoodsSaveRequest request) {
-        return recordService.saveInventoryRecord(request) ? Result.success() : Result.fail();
+        recordService.saveInventoryRecord(request);
+        return Result.success();
     }
 }

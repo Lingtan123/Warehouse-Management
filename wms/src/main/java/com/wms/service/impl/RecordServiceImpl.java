@@ -12,6 +12,8 @@ import com.wms.common.QueryPageParam;
 import com.wms.common.RecordResult;
 import com.wms.entity.Goods;
 import com.wms.entity.Record;
+import com.wms.exception.AllException;
+import com.wms.exception.myException;
 import com.wms.mapper.GoodsMapper;
 import com.wms.mapper.RecordMapper;
 import com.wms.service.IRecordService;
@@ -19,7 +21,6 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.HashMap;
 
@@ -68,7 +69,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         if (goods == null || goods.getCount() == null) {
             log.warn("event=INVENTORY_OPERATE_FAIL operatorId={} operatorNo={} operatorName={} goodsId={} action={} reason=goods_not_found",
                     operatorId(), operatorNo(), operatorName(), request.getId(), actionName(request));
-            return false;
+            throw new myException(AllException.NO_THIS_GOOD);
         }
 
         CurrentUser currentUser = UserContext.getCurrentUser();
@@ -84,15 +85,14 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
             log.warn("event=OUT_STOCK_FAIL operatorId={} operatorNo={} operatorName={} executorUserId={} executorUserName={} goodsId={} goodsName={} requestCount={} currentCount={} reason=insufficient_stock",
                     operatorId(), operatorNo(), operatorName(),
                     request.getUserId(), request.getUserName(), goods.getId(), goods.getName(), request.getCount(), beforeCount);
-            return false;
+            throw new myException(AllException.GOODS_DEFICIENCY);
         }
 
         goods.setCount(targetCount);
         if (goodsMapper.updateById(goods) <= 0) {
             log.warn("event=INVENTORY_OPERATE_FAIL operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} action={} reason=update_stock_failed",
                     operatorId(), operatorNo(), operatorName(), goods.getId(), goods.getName(), actionName(request));
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+            throw new myException(AllException.GOODS_UPDATE_ERROR);
         }
 
         Record record = new Record();
@@ -104,8 +104,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         if (recordMapper.insert(record) <= 0) {
             log.warn("event=INVENTORY_OPERATE_FAIL operatorId={} operatorNo={} operatorName={} goodsId={} goodsName={} action={} reason=insert_record_failed",
                     operatorId(), operatorNo(), operatorName(), goods.getId(), goods.getName(), actionName(request));
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+            throw new myException(AllException.RECORD_INSERT_ERROR);
         }
 
         log.info("event={} operatorId={} operatorNo={} operatorName={} executorUserId={} executorUserName={} goodsId={} goodsName={} count={} beforeCount={} afterCount={}",

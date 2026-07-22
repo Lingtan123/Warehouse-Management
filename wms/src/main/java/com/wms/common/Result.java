@@ -1,6 +1,5 @@
 package com.wms.common;
 
-import com.wms.entity.User;
 import lombok.Data;
 
 import java.util.List;
@@ -16,6 +15,10 @@ public class Result {
         return new Result(400, "失败", 0L, null);
     }
 
+    public static Result fail(String msg) {
+        return new Result(400, msg, 0L, null);
+    }
+
     public static Result unauthorized(String msg) {
         return new Result(401, msg, 0L, null);
     }
@@ -24,12 +27,8 @@ public class Result {
         return new Result(200, "成功", 0L, null);
     }
 
-    public static Result success(List<User> list) {
-        int sum = 0;
-        for (User user : list) {
-            sum++;
-        }
-        return new Result(200, "成功", sum, list);
+    public static Result success(List<?> list) {
+        return new Result(200, "成功", list == null ? 0L : list.size(), list);
     }
 
     public static Result success(Object data) {

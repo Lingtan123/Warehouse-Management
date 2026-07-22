@@ -9,6 +9,8 @@ import com.wms.auth.UserContext;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.Goodstype;
+import com.wms.exception.AllException;
+import com.wms.exception.myException;
 import com.wms.service.IGoodstypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,49 +28,35 @@ public class GoodstypeController {
 
     @PostMapping("/save")
     public Result save(@RequestBody Goodstype goodstype) {
-        boolean saved = goodstypeService.save(goodstype);
-        if (saved) {
-            log.info("event=CREATE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
-                    operatorId(), operatorNo(), operatorName(), goodstype.getId(), goodstype.getName());
-            return Result.success();
+        if (!goodstypeService.save(goodstype)) {
+            throw new myException(AllException.GOODSTYPE_INSERT_ERROR);
         }
-
-        log.warn("event=CREATE_GOODSTYPE_FAIL operatorId={} operatorNo={} operatorName={} goodstypeName={}",
-                operatorId(), operatorNo(), operatorName(), goodstype.getName());
-        return Result.fail();
+        log.info("event=CREATE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
+                operatorId(), operatorNo(), operatorName(), goodstype.getId(), goodstype.getName());
+        return Result.success();
     }
 
     @PostMapping("/mod")
     public Result mod(@RequestBody Goodstype goodstype) {
-        boolean updated = goodstypeService.updateById(goodstype);
-        if (updated) {
-            log.info("event=UPDATE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
-                    operatorId(), operatorNo(), operatorName(), goodstype.getId(), goodstype.getName());
-            return Result.success();
+        if (!goodstypeService.updateById(goodstype)) {
+            throw new myException(AllException.GOODSTYPE_UPDATE_ERROR);
         }
-
-        log.warn("event=UPDATE_GOODSTYPE_FAIL operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
+        log.info("event=UPDATE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
                 operatorId(), operatorNo(), operatorName(), goodstype.getId(), goodstype.getName());
-        return Result.fail();
+        return Result.success();
     }
 
     @GetMapping("/delete")
     public Result delete(int id) {
         Goodstype goodstype = goodstypeService.getById(id);
-        boolean removed = goodstypeService.removeById(id);
-        if (removed) {
-            log.info("event=DELETE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
-                    operatorId(), operatorNo(), operatorName(),
-                    goodstype == null ? id : goodstype.getId(),
-                    goodstype == null ? null : goodstype.getName());
-            return Result.success();
+        if (!goodstypeService.removeById(id)) {
+            throw new myException(AllException.GOODSTYPE_DELETE_ERROR);
         }
-
-        log.warn("event=DELETE_GOODSTYPE_FAIL operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
+        log.info("event=DELETE_GOODSTYPE operatorId={} operatorNo={} operatorName={} goodstypeId={} goodstypeName={}",
                 operatorId(), operatorNo(), operatorName(),
                 goodstype == null ? id : goodstype.getId(),
                 goodstype == null ? null : goodstype.getName());
-        return Result.fail();
+        return Result.success();
     }
 
     @PostMapping("/listPageC")

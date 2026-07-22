@@ -3,7 +3,6 @@ package com.wms.controller;
 
 import com.wms.common.Result;
 import com.wms.entity.Menu;
-import com.wms.entity.User;
 import com.wms.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
