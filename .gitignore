@@ -16,6 +16,9 @@ dist/
 
 *.txt
 
+技术亮点.txt
+疑问.txt
+
 application-local.properties
 application-local.yml
 wms/src/main/resources/application.properties
